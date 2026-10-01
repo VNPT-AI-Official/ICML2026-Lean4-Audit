@@ -1,0 +1,85 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# FormalRx Challenge Pipeline V2 — config.yaml
+# Self-consistency voting + Dynamic few-shot
+# ─────────────────────────────────────────────────────────────────────────────
+
+active_provider: "claude"
+
+# ── Per-Stage Provider Routing ────────────────────────────────────────────────
+# Override which provider handles each stage. null = use active_provider.
+stage_providers:
+  verdict: "claude"           # Stage 1a: Verdict (self-consistency votes)
+  correction: "claude"        # Stage 1b: Correction + Localization
+  category: "claude"          # Stage 2:  Error categorization (group → category)
+
+providers:
+  claude:
+    base_url: "https://api.anthropic.com/v1"
+    api_key: ""
+    model: "claude-opus-4-8"
+
+# ── Dataset ───────────────────────────────────────────────────────────────────
+dataset:
+  source: "local"
+  hf_repo: "LARK-Lab/FormalRx-Test"
+  hf_split: "test"
+  local_path: "../datasets/FormalRx_Test.jsonl"
+
+# ── Architecture ──────────────────────────────────────────────────────────────
+architecture:
+  use_rule_classifier: true
+  use_lean_compiler: false
+  category_stages: 1          # 1 = direct 1-call classify, 2 = group→category 2-call (legacy)
+
+# ── Self-Consistency (V2) ─────────────────────────────────────────────────────
+self_consistency:
+  stage1a_n_votes: 3            # Number of parallel verdict votes
+  stage1a_temperature: 0.5      # Temperature for verdict diversity
+  verdict_threshold: 2          # Minimum votes for majority (>= this = win)
+  verdict_strategy: "any_misaligned"  # "majority" = need threshold votes, "any_misaligned" = 1 M vote → Misaligned
+  stage2_n_votes: 3             # Number of parallel category votes (Stage 2 self-consistency)
+  stage2_temperature: 0.5       # Temperature for category vote diversity
+
+
+# ── Pipeline ──────────────────────────────────────────────────────────────────
+pipeline:
+  max_concurrency: 10
+  max_retries: 3
+  retry_delay: 5.0
+  retry_backoff: 2.0
+
+# ── LLM Generation ────────────────────────────────────────────────────────────
+generation:
+  on_thinking: true             # Enable thinking/reasoning mode for supported models
+  temperature: 0.0              # Default temperature (Stage 1b, Stage 2)
+  max_tokens: 4096
+  stage1_max_tokens: 512       # Verdict-only needs fewer tokens
+  stage1b_max_tokens: 4096      # Correction may need more
+  stage2_max_tokens: 1024       # Group & Category classification
+  response_format: "json_object"
+  use_few_shot: true
+  few_shot_count: 2
+
+# ── Output ────────────────────────────────────────────────────────────────────
+output:
+  predictions_file: "predictions.jsonl"
+  checkpoint_file: ".checkpoint.jsonl"
+  submission_zip: "submission.zip"
+  log_file: "pipeline.log"
+  save_reasoning: true
+
+# ── Lean Structure Enrichment ─────────────────────────────────────────────────
+lean_structure:
+  enabled: true
+  enriched_file: "../datasets/enriched_dataset.jsonl"  # Pre-processed Lean structure data
+  use_regex_fallback: true                  # Use regex-based parser when LSP file not found
+
+# ── Search Reference (Mathlib match injection) ───────────────────────────────
+search_reference:
+  enabled: true
+  ground_truth_file: "../datasets/search_results.json"
+  score_threshold: 0.92                     # Only inject references with score > this
+
+
+postprocess:
+  exclude_categories:
