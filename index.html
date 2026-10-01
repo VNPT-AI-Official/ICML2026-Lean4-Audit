@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Lean 4 Semantic Alignment Auditing | AI for Math Workshop @ ICML 2026</title>
+
+    <meta name="description"
+        content="Automated Semantic Alignment Verification and Error Categorization of Lean 4 Formalizations via Decomposition-Guided Auditing — technical report for AI4Math-2026 Track 1 (FormalRx), ICML 2026 AI for Math Workshop. Huan Vu, Cuong Nguyen, Thien Luong.">
+    <meta property="og:title" content="Automated Semantic Alignment Verification and Error Categorization of Lean 4 Formalizations via Decomposition-Guided Auditing">
+    <meta property="og:description"
+        content="Automated Semantic Alignment Verification and Error Categorization of Lean 4 Formalizations via Decomposition-Guided Auditing — technical report for AI4Math-2026 Track 1 (FormalRx), ICML 2026 AI for Math Workshop. Huan Vu, Cuong Nguyen, Thien Luong.">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-0.7 0 50.1 54.1'%3E%3Cdefs%3E%3CradialGradient id='f0' cx='0' cy='0' r='1' gradientUnits='userSpaceOnUse' gradientTransform='translate(24.35 27) scale(25.93 25.53)'%3E%3Cstop stop-color='%230047BB'/%3E%3Cstop offset='1' stop-color='%230072CE'/%3E%3C/radialGradient%3E%3ClinearGradient id='f1' x1='22.6' y1='20.6' x2='28.96' y2='20.6' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%230047BB'/%3E%3Cstop offset='0.19' stop-color='%23004CBD' stop-opacity='0.81'/%3E%3Cstop offset='0.41' stop-color='%23005AC3' stop-opacity='0.59'/%3E%3Cstop offset='0.64' stop-color='%230071CC' stop-opacity='0.36'/%3E%3Cstop offset='0.88' stop-color='%230091D9' stop-opacity='0.12'/%3E%3Cstop offset='1' stop-color='%2300A3E0' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='f2' x1='29.36' y1='18.04' x2='26.26' y2='6.04' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%230047BB'/%3E%3Cstop offset='0.19' stop-color='%23004CBD' stop-opacity='0.81'/%3E%3Cstop offset='0.41' stop-color='%23005AC3' stop-opacity='0.59'/%3E%3Cstop offset='0.64' stop-color='%230071CC' stop-opacity='0.36'/%3E%3Cstop offset='0.88' stop-color='%230091D9' stop-opacity='0.12'/%3E%3Cstop offset='1' stop-color='%2300A3E0' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='f3' x1='17.86' y1='25.27' x2='20.97' y2='19.8' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%230047BB'/%3E%3Cstop offset='0.19' stop-color='%23004CBD' stop-opacity='0.81'/%3E%3Cstop offset='0.41' stop-color='%23005AC3' stop-opacity='0.59'/%3E%3Cstop offset='0.64' stop-color='%230071CC' stop-opacity='0.36'/%3E%3Cstop offset='0.88' stop-color='%230091D9' stop-opacity='0.12'/%3E%3Cstop offset='1' stop-color='%2300A3E0' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='f4' x1='18.98' y1='18.23' x2='6.88' y2='14.86' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%230047BB'/%3E%3Cstop offset='0.19' stop-color='%23004CBD' stop-opacity='0.81'/%3E%3Cstop offset='0.41' stop-color='%23005AC3' stop-opacity='0.59'/%3E%3Cstop offset='0.64' stop-color='%230071CC' stop-opacity='0.36'/%3E%3Cstop offset='0.88' stop-color='%230091D9' stop-opacity='0.12'/%3E%3Cstop offset='1' stop-color='%2300A3E0' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='f5' x1='19.6' y1='31.65' x2='16.49' y2='26.18' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%230047BB'/%3E%3Cstop offset='0.19' stop-color='%23004CBD' stop-opacity='0.81'/%3E%3Cstop offset='0.41' stop-color='%23005AC3' stop-opacity='0.59'/%3E%3Cstop offset='0.64' stop-color='%230071CC' stop-opacity='0.36'/%3E%3Cstop offset='0.88' stop-color='%230091D9' stop-opacity='0.12'/%3E%3Cstop offset='1' stop-color='%2300A3E0' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='f6' x1='13.97' y1='27.17' x2='5.17' y2='36.01' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%230047BB'/%3E%3Cstop offset='0.19' stop-color='%23004CBD' stop-opacity='0.81'/%3E%3Cstop offset='0.41' stop-color='%23005AC3' stop-opacity='0.59'/%3E%3Cstop offset='0.64' stop-color='%230071CC' stop-opacity='0.36'/%3E%3Cstop offset='0.88' stop-color='%230091D9' stop-opacity='0.12'/%3E%3Cstop offset='1' stop-color='%2300A3E0' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='f7' x1='26.08' y1='33.37' x2='19.72' y2='33.37' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%230047BB'/%3E%3Cstop offset='0.19' stop-color='%23004CBD' stop-opacity='0.81'/%3E%3Cstop offset='0.41' stop-color='%23005AC3' stop-opacity='0.59'/%3E%3Cstop offset='0.64' stop-color='%230071CC' stop-opacity='0.36'/%3E%3Cstop offset='0.88' stop-color='%230091D9' stop-opacity='0.12'/%3E%3Cstop offset='1' stop-color='%2300A3E0' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='f8' x1='19.33' y1='35.93' x2='22.42' y2='47.92' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%230047BB'/%3E%3Cstop offset='0.19' stop-color='%23004CBD' stop-opacity='0.81'/%3E%3Cstop offset='0.41' stop-color='%23005AC3' stop-opacity='0.59'/%3E%3Cstop offset='0.64' stop-color='%230071CC' stop-opacity='0.36'/%3E%3Cstop offset='0.88' stop-color='%230091D9' stop-opacity='0.12'/%3E%3Cstop offset='1' stop-color='%2300A3E0' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='f9' x1='30.85' y1='28.74' x2='27.74' y2='34.2' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%230047BB'/%3E%3Cstop offset='0.19' stop-color='%23004CBD' stop-opacity='0.81'/%3E%3Cstop offset='0.41' stop-color='%23005AC3' stop-opacity='0.59'/%3E%3Cstop offset='0.64' stop-color='%230071CC' stop-opacity='0.36'/%3E%3Cstop offset='0.88' stop-color='%230091D9' stop-opacity='0.12'/%3E%3Cstop offset='1' stop-color='%2300A3E0' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='f10' x1='29.72' y1='35.78' x2='41.82' y2='39.14' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%230047BB'/%3E%3Cstop offset='0.19' stop-color='%23004CBD' stop-opacity='0.81'/%3E%3Cstop offset='0.41' stop-color='%23005AC3' stop-opacity='0.59'/%3E%3Cstop offset='0.64' stop-color='%230071CC' stop-opacity='0.36'/%3E%3Cstop offset='0.88' stop-color='%230091D9' stop-opacity='0.12'/%3E%3Cstop offset='1' stop-color='%2300A3E0' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='f11' x1='29.11' y1='22.32' x2='32.21' y2='27.79' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%230047BB'/%3E%3Cstop offset='0.19' stop-color='%23004CBD' stop-opacity='0.81'/%3E%3Cstop offset='0.41' stop-color='%23005AC3' stop-opacity='0.59'/%3E%3Cstop offset='0.64' stop-color='%230071CC' stop-opacity='0.36'/%3E%3Cstop offset='0.88' stop-color='%230091D9' stop-opacity='0.12'/%3E%3Cstop offset='1' stop-color='%2300A3E0' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='f12' x1='34.73' y1='26.8' x2='43.54' y2='17.96' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%230047BB'/%3E%3Cstop offset='0.19' stop-color='%23004CBD' stop-opacity='0.81'/%3E%3Cstop offset='0.41' stop-color='%23005AC3' stop-opacity='0.59'/%3E%3Cstop offset='0.64' stop-color='%230071CC' stop-opacity='0.36'/%3E%3Cstop offset='0.88' stop-color='%230091D9' stop-opacity='0.12'/%3E%3Cstop offset='1' stop-color='%2300A3E0' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M46.5 34.6C45.7 34.1 44.7 33.9 43.8 34C42.6 34.2 41.3 33.9 40.3 33.3C38.9 32.5 38 31.3 37.6 29.9C37.2 28.7 36.5 27.8 35.6 27C36.6 26.3 37.3 25.3 37.6 24.1C38 22.7 39 21.5 40.3 20.7C41.4 20.1 42.6 19.9 43.8 20C44.7 20.1 45.7 19.9 46.5 19.4C47.5 18.9 48.2 17.9 48.5 16.8C48.8 15.7 48.7 14.5 48.1 13.5C46.9 11.4 44.2 10.7 42.1 11.9C41.3 12.4 40.6 13.1 40.3 13.9C39.8 15 38.9 16 37.8 16.6C36.5 17.3 35 17.5 33.5 17.2C32.3 16.9 31.1 17 30 17.4C29.8 16.2 29.3 15.1 28.4 14.2C27.4 13.2 26.8 11.8 26.8 10.3C26.8 9.1 27.2 7.9 27.9 6.9C28.5 6.2 28.8 5.3 28.8 4.3C28.8 1.9 26.8 0 24.4 0C21.9 0 20 1.9 20 4.3C20 5.3 20.3 6.1 20.8 6.9C21.5 7.9 21.9 9.1 21.9 10.3C21.9 11.8 21.3 13.2 20.3 14.3C19.4 15.1 18.9 16.2 18.7 17.4C17.6 16.9 16.4 16.8 15.2 17.1C13.7 17.5 12.2 17.3 10.9 16.5C9.8 15.9 9 15 8.5 13.9C8.1 13.1 7.4 12.4 6.6 11.9C4.5 10.7 1.8 11.4 0.6 13.5C0 14.5-0.1 15.7 0.2 16.8C0.5 17.9 1.2 18.8 2.2 19.4C3 19.9 4 20.1 4.9 20C6.1 19.8 7.3 20.1 8.4 20.7C9.7 21.5 10.7 22.7 11.1 24.1C11.5 25.3 12.1 26.2 13.1 27C12.1 27.7 11.4 28.7 11.1 29.9C10.7 31.3 9.7 32.5 8.4 33.3C7.3 33.9 6.1 34.1 4.9 34C3.9 33.9 3 34.1 2.2 34.6C0.1 35.8-0.6 38.4 0.6 40.5C1.4 41.9 2.9 42.7 4.4 42.7C5.2 42.7 5.9 42.5 6.6 42.1C7.4 41.6 8.1 40.9 8.4 40.1C8.9 39 9.8 38 10.9 37.4C12.2 36.7 13.7 36.5 15.2 36.8C16.4 37.1 17.6 37 18.7 36.6C18.9 37.8 19.4 38.9 20.3 39.8C21.3 40.8 21.9 42.2 21.9 43.7C21.9 44.9 21.5 46.1 20.8 47.1C20.2 47.8 19.9 48.7 19.9 49.7C19.9 52.1 21.9 54 24.3 54C26.8 54 28.7 52.1 28.7 49.7C28.7 48.7 28.4 47.9 27.9 47.1C27.2 46.1 26.8 45 26.8 43.7C26.8 42.2 27.4 40.8 28.4 39.7C29.3 38.9 29.8 37.8 30 36.6C31.1 37.1 32.3 37.2 33.5 36.9C35 36.5 36.5 36.7 37.8 37.5C38.9 38.1 39.7 39 40.2 40.1C40.6 40.9 41.2 41.6 42.1 42.1C42.8 42.5 43.5 42.7 44.3 42.7C45.8 42.7 47.3 41.9 48.1 40.5C49.3 38.4 48.6 35.8 46.5 34.6ZM27.2 28.6C26.8 29.3 26.6 29.9 26.5 30.6C25.8 30.4 25.1 30.2 24.3 30.2C23.6 30.2 22.9 30.3 22.2 30.6C22.1 29.9 21.9 29.2 21.5 28.6C21.2 28 20.7 27.4 20.1 27C20.7 26.6 21.2 26 21.5 25.4C21.9 24.8 22.1 24.1 22.2 23.4C22.9 23.7 23.6 23.8 24.4 23.8C25.1 23.8 25.8 23.7 26.5 23.4C26.6 24.1 26.8 24.8 27.2 25.4C27.5 26.1 28 26.6 28.6 27C28 27.4 27.5 28 27.2 28.6ZM42.5 14.9C42.7 14.5 42.9 14.2 43.3 14C43.6 13.8 43.9 13.8 44.3 13.8C45 13.8 45.6 14.1 46 14.7C46.5 15.6 46.2 16.8 45.3 17.4C44.9 17.6 44.5 17.6 44.1 17.6C42.3 17.4 40.6 17.8 39.1 18.6C40.6 17.8 41.8 16.5 42.5 14.9ZM32.1 19.4C32.4 19.4 32.6 19.4 32.9 19.5L32.9 19.5C35 20 37.1 19.7 39 18.7C37.2 19.7 35.8 21.4 35.2 23.4C35 24.3 34.5 24.9 33.7 25.4C32.2 26.3 30.2 25.7 29.3 24.2C28.9 23.5 28.7 22.6 29 21.8C29.2 21 29.7 20.3 30.5 19.8C31 19.6 31.5 19.4 32.1 19.4ZM24.4 2.4C25.4 2.4 26.3 3.3 26.3 4.3C26.3 4.8 26.2 5.1 25.9 5.5C24.9 6.9 24.4 8.5 24.4 10.2C24.3 8.5 23.8 6.9 22.8 5.5C22.5 5.1 22.4 4.8 22.4 4.3C22.4 3.3 23.3 2.4 24.4 2.4ZM22 16L22 16C23.5 14.5 24.3 12.5 24.4 10.4C24.4 12.4 25.2 14.4 26.7 15.9C27.3 16.5 27.6 17.3 27.6 18.2C27.6 20 26.2 21.4 24.4 21.4C22.6 21.4 21.1 20 21.1 18.2C21.1 17.4 21.4 16.6 22 16ZM5.5 17.5C5.2 17.5 4.9 17.5 4.6 17.6C4.2 17.6 3.8 17.5 3.5 17.3C3 17.1 2.7 16.6 2.5 16.2C2.4 15.7 2.5 15.1 2.7 14.7C3 14.2 3.4 13.9 3.9 13.8C4.4 13.7 5 13.7 5.4 14C5.8 14.2 6 14.5 6.2 14.9C6.9 16.4 8.1 17.7 9.6 18.6C8.3 17.9 6.9 17.5 5.5 17.5ZM9.7 18.7C11.6 19.7 13.7 20 15.8 19.5C16.6 19.3 17.5 19.4 18.2 19.8C19 20.2 19.5 20.9 19.7 21.8C20 22.6 19.9 23.4 19.4 24.2C18.5 25.7 16.5 26.2 15 25.3C14.3 24.9 13.7 24.3 13.5 23.5L13.5 23.5C12.9 21.4 11.6 19.7 9.7 18.7ZM6.2 39.1C6 39.5 5.7 39.8 5.4 40C4.5 40.5 3.3 40.2 2.7 39.3C2.2 38.4 2.5 37.2 3.4 36.6C3.7 36.5 4.1 36.4 4.4 36.4C4.5 36.4 4.6 36.4 4.6 36.4C6.4 36.6 8.1 36.2 9.6 35.4C8.1 36.2 6.9 37.5 6.2 39.1ZM15.8 34.5L15.8 34.5C13.7 34 11.5 34.3 9.7 35.3C11.5 34.3 12.8 32.6 13.5 30.6C13.7 29.7 14.2 29.1 15 28.6C15.5 28.3 16 28.2 16.6 28.2C16.9 28.2 17.1 28.2 17.4 28.3C18.3 28.5 19 29.1 19.4 29.8C20.3 31.3 19.8 33.3 18.2 34.2C17.5 34.6 16.6 34.7 15.8 34.5ZM24.3 51.6C23.2 51.6 22.4 50.7 22.4 49.7C22.4 49.2 22.5 48.9 22.8 48.5C23.8 47.1 24.3 45.5 24.3 43.8C24.3 45.5 24.9 47.1 25.9 48.5C26.2 48.9 26.3 49.3 26.3 49.7C26.3 50.7 25.4 51.6 24.3 51.6ZM26.7 38L26.7 38C25.2 39.6 24.3 41.5 24.3 43.6C24.3 41.6 23.5 39.6 22 38.1C21.4 37.5 21.1 36.7 21.1 35.8C21.1 34.1 22.5 32.6 24.3 32.6C26.1 32.6 27.6 34.1 27.6 35.8C27.6 36.6 27.2 37.4 26.7 38ZM34.9 34.3C34.2 34.3 33.6 34.4 32.9 34.5C32.1 34.7 31.2 34.6 30.5 34.2C28.9 33.3 28.4 31.4 29.3 29.8C30.2 28.3 32.2 27.8 33.7 28.7C34.4 29.1 35 29.7 35.2 30.5L35.2 30.5C35.8 32.6 37.1 34.3 39 35.3C37.7 34.6 36.3 34.3 34.9 34.3ZM46 39.3C45.4 40.2 44.2 40.5 43.3 40C42.9 39.8 42.6 39.5 42.5 39.1C41.8 37.6 40.6 36.3 39.1 35.4C40.6 36.3 42.3 36.6 44.1 36.4C44.5 36.4 44.9 36.5 45.2 36.7C46.2 37.2 46.5 38.4 46 39.3Z' fill='url(%23f0)'/%3E%3Cpath d='M14.2 13.4C12.9 13.4 11.7 12.7 11.1 11.6C10.6 10.8 10.5 9.8 10.7 8.9C11 8 11.6 7.2 12.4 6.7C13 6.4 13.6 6.3 14.2 6.3C15.5 6.3 16.7 7 17.4 8.1C18.4 9.8 17.8 12 16.1 13C15.5 13.3 14.9 13.4 14.2 13.4Z' fill='%2359CBE8'/%3E%3Cpath d='M7.4 28.8C6.7 29.9 5.5 30.6 4.2 30.6C3.2 30.6 2.3 30.3 1.6 29.6C1 28.9 0.6 28 0.6 27C0.6 26.4 0.7 25.8 1.1 25.3C1.7 24.1 2.9 23.5 4.2 23.5C6.2 23.5 7.9 25.1 7.9 27C7.9 27.7 7.7 28.3 7.4 28.8Z' fill='%2359CBE8'/%3E%3Cpath d='M17.5 42.4C18.1 43.5 18.1 44.9 17.5 46C17 46.8 16.2 47.4 15.3 47.6C14.3 47.9 13.3 47.8 12.5 47.3C11.9 47 11.5 46.5 11.2 46C10.5 44.9 10.5 43.5 11.2 42.4C12.2 40.7 14.4 40.1 16.1 41.1C16.7 41.4 17.1 41.9 17.5 42.4Z' fill='%2359CBE8'/%3E%3Cpath d='M34.4 40.6C35.7 40.6 37 41.3 37.6 42.4C38.1 43.2 38.2 44.2 38 45.1C37.7 46 37.1 46.8 36.3 47.3C35.7 47.6 35.1 47.7 34.5 47.7C33.2 47.7 31.9 47 31.3 45.9C30.3 44.2 30.9 42 32.6 41C33.2 40.7 33.8 40.6 34.4 40.6Z' fill='%2359CBE8'/%3E%3Cpath d='M41.3 25.2C42 24.1 43.2 23.4 44.5 23.4C45.5 23.4 46.4 23.7 47.1 24.4C47.7 25.1 48.1 26 48.1 27C48.1 27.6 47.9 28.2 47.6 28.7C47 29.9 45.8 30.5 44.5 30.5C42.5 30.5 40.8 28.9 40.8 27C40.8 26.3 41 25.7 41.3 25.2Z' fill='%2359CBE8'/%3E%3Cpath d='M31.2 11.6C30.6 10.5 30.6 9.1 31.2 8C31.7 7.2 32.5 6.6 33.4 6.4C34.4 6.1 35.4 6.2 36.2 6.7C36.7 7 37.2 7.5 37.5 8C38.2 9.1 38.2 10.5 37.5 11.6C36.5 13.3 34.3 13.9 32.6 12.9C32 12.6 31.5 12.1 31.2 11.6Z' fill='%2359CBE8'/%3E%3Cpath d='M30 17.4C29.7 17.5 29.5 17.6 29.3 17.8C28.4 18.3 27.6 19 27.1 19.9C26.6 20.8 25.5 21.4 24.4 21.4C23.1 21.4 22.1 20.7 21.5 19.7L21.6 19.8C21.8 20.2 22 20.7 22.1 21.1C22.3 21.9 22.4 22.6 22.2 23.4C22.9 23.6 23.6 23.8 24.4 23.8C25.1 23.8 25.8 23.7 26.5 23.4C28.6 22.6 30.1 20.6 30.1 18.2C30.1 17.9 30 17.7 30 17.4Z' fill='url(%23f1)'/%3E%3Cpath d='M29.3 17.8C29.5 17.6 29.7 17.5 30 17.4C29.8 16.2 29.3 15.1 28.4 14.2C27.4 13.2 26.8 11.8 26.8 10.3C26.8 9.1 27.2 7.9 27.9 6.9C28.5 6.2 28.8 5.3 28.8 4.3C28.8 1.9 26.8 0 24.4 0V2.4C25.4 2.4 26.3 3.3 26.3 4.3C26.3 4.8 26.2 5.1 25.9 5.5C24.9 6.9 24.4 8.5 24.4 10.2V10.4C24.4 12.4 25.2 14.4 26.7 15.9C27.3 16.5 27.6 17.3 27.6 18.2C27.6 18.8 27.4 19.4 27.1 19.9L27.1 19.9C27.6 19 28.4 18.3 29.3 17.8Z' fill='url(%23f2)'/%3E%3Cpath d='M18.7 17.4C18.7 17.6 18.7 17.9 18.7 18.2C18.7 19.2 18.9 20.2 19.5 21.1C20 22 20 23.2 19.4 24.2C18.8 25.2 17.7 25.8 16.5 25.8L16.6 25.8C17.1 25.8 17.6 25.8 18.1 26C18.8 26.2 19.5 26.5 20.1 27C20.7 26.5 21.2 26 21.6 25.4C21.9 24.7 22.1 24.1 22.3 23.4C22.6 21.2 21.5 18.9 19.5 17.7C19.2 17.6 19 17.5 18.7 17.4Z' fill='url(%23f3)'/%3E%3Cpath d='M18.7 18.2C18.7 17.9 18.7 17.6 18.7 17.4C17.6 16.9 16.4 16.8 15.2 17.1C13.7 17.5 12.2 17.3 10.9 16.5C9.8 15.9 9 15 8.5 13.9C8.1 13 7.5 12.3 6.6 11.9C4.5 10.7 1.8 11.4 0.6 13.5L2.7 14.7C3.3 13.8 4.5 13.4 5.4 14C5.8 14.2 6.1 14.5 6.2 14.9C6.9 16.4 8.1 17.7 9.6 18.6L9.7 18.6C11.6 19.7 13.7 20 15.8 19.5C16.6 19.3 17.5 19.4 18.2 19.8C18.8 20.1 19.2 20.5 19.5 21L19.5 21C19 20.2 18.7 19.2 18.7 18.2Z' fill='url(%23f4)'/%3E%3Cpath d='M13.1 26.9C13.3 27.1 13.5 27.3 13.8 27.4C14.7 27.9 15.7 28.2 16.7 28.2C17.8 28.2 18.8 28.8 19.4 29.8C20 30.8 20 32.1 19.4 33L19.4 32.9C19.7 32.5 20 32.2 20.3 31.8C20.9 31.3 21.5 30.9 22.2 30.6C22.1 29.9 21.9 29.2 21.5 28.6C21.2 27.9 20.7 27.4 20.1 27C18.3 25.6 15.8 25.3 13.7 26.5C13.5 26.6 13.3 26.8 13.1 26.9Z' fill='url(%23f5)'/%3E%3Cpath d='M13.8 27.4C13.5 27.3 13.3 27.1 13.1 26.9C12.1 27.7 11.4 28.7 11.1 29.9C10.7 31.3 9.7 32.5 8.4 33.2C7.3 33.8 6.1 34.1 4.9 34C4 33.9 3 34.1 2.2 34.5C0.1 35.7-0.6 38.4 0.6 40.5L2.7 39.3C2.2 38.3 2.5 37.2 3.4 36.6C3.8 36.4 4.2 36.3 4.6 36.4C6.4 36.5 8.1 36.2 9.6 35.4L9.7 35.3C11.5 34.2 12.9 32.6 13.5 30.5C13.7 29.7 14.2 29 15 28.6C15.5 28.3 16.1 28.2 16.7 28.2L16.7 28.2C15.7 28.2 14.7 27.9 13.8 27.4Z' fill='url(%23f6)'/%3E%3Cpath d='M18.7 36.6C18.9 36.5 19.2 36.3 19.4 36.2C20.3 35.7 21.1 35 21.6 34.1C22.1 33.2 23.2 32.6 24.3 32.6C25.5 32.6 26.6 33.3 27.2 34.3L27.1 34.2C26.9 33.7 26.7 33.3 26.6 32.8C26.4 32.1 26.3 31.3 26.4 30.6C25.8 30.3 25.1 30.2 24.3 30.2C23.6 30.2 22.9 30.3 22.2 30.6C20.1 31.4 18.6 33.4 18.6 35.8C18.6 36 18.6 36.3 18.7 36.6Z' fill='url(%23f7)'/%3E%3Cpath d='M19.4 36.2C19.2 36.3 18.9 36.5 18.7 36.6C18.9 37.8 19.4 38.9 20.3 39.7C21.3 40.8 21.9 42.2 21.9 43.7C21.9 44.9 21.5 46.1 20.8 47.1C20.2 47.8 19.9 48.7 19.9 49.6C19.9 52 21.9 54 24.3 54V51.6C23.2 51.6 22.4 50.7 22.4 49.6C22.4 49.2 22.5 48.8 22.7 48.5C23.8 47.1 24.3 45.5 24.3 43.8V43.6C24.3 41.5 23.5 39.6 22 38C21.4 37.4 21.1 36.6 21.1 35.8C21.1 35.2 21.3 34.6 21.6 34.1L21.5 34.1C21 35 20.3 35.7 19.4 36.2Z' fill='url(%23f8)'/%3E%3Cpath d='M30 36.6C30 36.4 30 36.1 30 35.8C30 34.8 29.8 33.8 29.3 33C28.7 32 28.7 30.8 29.3 29.8C29.9 28.8 31 28.2 32.2 28.3L32.1 28.2C31.6 28.2 31.1 28.2 30.6 28C29.9 27.8 29.2 27.5 28.6 27C28 27.5 27.5 28 27.2 28.6C26.8 29.3 26.6 29.9 26.5 30.6C26.1 32.8 27.2 35.1 29.2 36.3C29.5 36.4 29.7 36.5 30 36.6Z' fill='url(%23f9)'/%3E%3Cpath d='M30 35.8C30 36.1 30 36.4 30 36.6C31.1 37.1 32.4 37.2 33.5 36.9C35 36.5 36.5 36.7 37.8 37.5C38.9 38.1 39.7 39 40.2 40.1C40.6 41 41.3 41.7 42.1 42.1C44.2 43.3 46.9 42.6 48.1 40.5L46 39.3C45.4 40.2 44.2 40.6 43.3 40C42.9 39.8 42.7 39.5 42.5 39.1C41.8 37.6 40.6 36.3 39.1 35.4L39 35.4C37.2 34.3 35 34 32.9 34.5C32.1 34.7 31.2 34.6 30.5 34.2C29.9 33.9 29.5 33.5 29.3 33L29.2 33C29.8 33.8 30 34.8 30 35.8Z' fill='url(%23f10)'/%3E%3Cpath d='M35.6 27C35.4 26.9 35.2 26.7 34.9 26.6C34 26.1 33 25.8 32 25.8C30.9 25.8 29.9 25.2 29.3 24.2C28.7 23.2 28.8 21.9 29.4 20.9L29.3 21C29 21.4 28.8 21.8 28.4 22.2C27.8 22.7 27.2 23.1 26.5 23.4C26.6 24.1 26.8 24.8 27.2 25.4C27.6 26.1 28 26.6 28.6 27C30.4 28.4 32.9 28.7 35 27.5C35.2 27.3 35.4 27.2 35.6 27Z' fill='url(%23f11)'/%3E%3Cpath d='M34.9 26.6C35.2 26.7 35.4 26.9 35.6 27C36.6 26.3 37.3 25.3 37.6 24.1C38 22.7 39 21.5 40.3 20.8C41.4 20.1 42.6 19.9 43.8 20C44.8 20.1 45.7 19.9 46.5 19.5C48.6 18.3 49.3 15.6 48.1 13.5L46 14.7C46.5 15.6 46.2 16.8 45.3 17.4C44.9 17.6 44.5 17.6 44.1 17.6C42.4 17.4 40.6 17.8 39.1 18.6L39 18.7C37.2 19.8 35.9 21.4 35.3 23.5C35 24.3 34.5 25 33.7 25.4C33.2 25.7 32.6 25.8 32 25.8L32 25.8C33 25.8 34 26.1 34.9 26.6Z' fill='url(%23f12)'/%3E%3C/svg%3E">
+
+    <!-- Fonts: Newsreader for academic editorial serif, Inter for crisp UI -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 4.6 & Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #FAF8F4;
+            --bg-elevated: #FFFFFF;
+            --bg-subtle: #F2EFE8;
+            --ink: #1A1814;
+            --ink-soft: #5A554C;
+            --ink-faint: #8E8678;
+            --hairline: #E4DFD4;
+            --hairline-strong: #C8C2B3;
+            --accent: #005baa;
+            /* VNPT Blue */
+            --accent-rgb: 0, 91, 170;
+            --accent-soft: #eef5fc;
+            --accent-text: #004080;
+            --hust-red: #c8102e;
+            --success: #208752;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --shadow-subtle: 0 4px 15px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--ink);
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Newsreader", Georgia, serif;
+            color: var(--ink);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        p {
+            color: var(--ink-soft);
+            font-size: 1.05rem;
+        }
+
+        a {
+            color: var(--accent);
+            transition: all 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--accent-text);
+            text-decoration: none;
+        }
+
+        /* Top Sticky Language Bar */
+        .top-navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(250, 248, 244, 0.94);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--hairline);
+            padding: 9px 0;
+            transition: all 0.3s ease;
+        }
+
+        /* Home button (VNPT AI logo) -> vnptai.github.io */
+        .nav-left {
+            display: flex;
+            align-items: center;
+            min-width: 0;
+        }
+
+        .home-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex: none;
+            padding: 4px 13px 4px 7px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--hairline-strong);
+            border-radius: 30px;
+            color: var(--ink);
+            font-weight: 700;
+            font-size: 0.92rem;
+            letter-spacing: -0.2px;
+            line-height: 1;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        .home-btn:hover,
+        .home-btn:focus-visible {
+            color: var(--accent-text);
+            border-color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        .home-mark {
+            width: 24px;
+            height: 26px;
+            flex: none;
+        }
+
+        .nav-divider {
+            width: 1px;
+            height: 22px;
+            margin: 0 14px;
+            background: var(--hairline-strong);
+            flex: none;
+        }
+
+        @media (max-width: 575.98px) {
+            .home-text {
+                display: none;
+            }
+
+            .home-btn {
+                padding: 5px 7px;
+            }
+
+            .nav-divider {
+                margin: 0 10px;
+            }
+
+            .lang-btn {
+                padding: 6px 10px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .lang-btn span {
+                display: none;
+            }
+        }
+
+        .lang-switch-container {
+            display: inline-flex;
+            align-items: center;
+            background: var(--bg-subtle);
+            border: 1px solid var(--hairline-strong);
+            border-radius: 30px;
+            padding: 3px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        .lang-btn {
+            border: none;
+            background: transparent;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--ink-soft);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .lang-btn.active {
+            background: var(--bg-elevated);
+            color: var(--ink);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .flag-icon {
+            width: 20px;
+            height: 14px;
+            object-fit: cover;
+            border-radius: 2px;
+            box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+            display: inline-block;
+        }
+
+        /* Author links with sliding underline */
+        .author-link {
+            position: relative;
+            text-decoration: none;
+            color: var(--ink);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .author-link::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 100%;
+            height: 2px;
+            background-color: var(--accent);
+            transform: scaleX(0);
+            transform-origin: left center;
+            transition: transform 0.25s ease;
+        }
+
+        .author-link:hover::after {
+            transform: scaleX(1);
+        }
+
+        .author-link:hover {
+            color: var(--accent);
+        }
+
+        /* Venue badge */
+        .venue-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #005baa 0%, #003a6c 100%);
+            color: #ffffff;
+            font-size: 1.05rem;
+            font-weight: 700;
+            padding: 8px 22px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0, 91, 170, 0.25);
+            letter-spacing: 0.4px;
+            margin: 14px 0 20px 0;
+        }
+
+        .oral-pill {
+            background: #ffc107;
+            color: #212529;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Button group */
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 9px 18px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--ink);
+            background: var(--bg-elevated);
+            border: 1px solid var(--hairline-strong);
+            border-radius: 10px;
+            text-decoration: none;
+            margin: 5px;
+            transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.09);
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .action-btn i,
+        .action-btn svg {
+            font-size: 1.1rem;
+        }
+
+        /* Stat cards */
+        .stat-card {
+            border-radius: var(--radius-md);
+            padding: 20px 16px;
+            text-align: center;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .stat-card .stat-icon {
+            font-size: 26px;
+            margin-bottom: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover .stat-icon {
+            transform: scale(1.25) rotate(-6deg);
+        }
+
+        .stat-card .stat-value {
+            font-size: 2.3rem;
+            font-weight: 800;
+            font-family: "Newsreader", serif;
+            line-height: 1.1;
+        }
+
+        .stat-card .stat-label {
+            font-weight: 700;
+            font-size: 0.88rem;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .stat-sub {
+            font-size: 0.82rem;
+            margin-top: 2px;
+            opacity: 0.85;
+        }
+
+        .stat-card.c1 {
+            background: #eaf1fb;
+            border-color: #cbe0fa;
+        }
+
+        .stat-card.c1 .stat-label,
+        .stat-card.c1 .stat-value,
+        .stat-card.c1 .stat-icon {
+            color: #005baa;
+        }
+
+        .stat-card.c2 {
+            background: #eaf6ef;
+            border-color: #c4ebd4;
+        }
+
+        .stat-card.c2 .stat-label,
+        .stat-card.c2 .stat-value,
+        .stat-card.c2 .stat-icon {
+            color: #208752;
+        }
+
+        .stat-card.c3 {
+            background: #fdf3e7;
+            border-color: #fce2c2;
+        }
+
+        .stat-card.c3 .stat-label,
+        .stat-card.c3 .stat-value,
+        .stat-card.c3 .stat-icon {
+            color: #c46400;
+        }
+
+        .stat-card.c4 {
+            background: #f4eefc;
+            border-color: #dfcefa;
+        }
+
+        .stat-card.c4 .stat-label,
+        .stat-card.c4 .stat-value,
+        .stat-card.c4 .stat-icon {
+            color: #6236bb;
+        }
+
+        /* Highlight cards */
+        .highlight-card {
+            border: 1px solid var(--hairline);
+            border-radius: var(--radius-md);
+            padding: 22px 20px;
+            background-color: var(--bg-elevated);
+            box-shadow: var(--shadow-subtle);
+            height: 100%;
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--hairline-strong);
+        }
+
+        .highlight-card .highlight-icon {
+            font-size: 28px;
+            display: inline-block;
+            margin-bottom: 12px;
+            transition: transform 0.35s ease;
+        }
+
+        .highlight-card:hover .highlight-icon {
+            transform: scale(1.2) rotate(-8deg);
+        }
+
+        .highlight-card .highlight-title {
+            font-weight: 700;
+            font-size: 1.15rem;
+            margin-bottom: 8px;
+            color: var(--ink);
+            font-family: "Newsreader", serif;
+        }
+
+        .highlight-card p {
+            margin-bottom: 0;
+            font-size: 0.94rem;
+            line-height: 1.55;
+        }
+
+        /* Section titles */
+        .section-header {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-header i,
+        .section-header span.emoji {
+            font-size: 1.8rem;
+        }
+
+        /* Figures */
+        .figure-box {
+            background: var(--bg-elevated);
+            border: 1px solid var(--hairline);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            box-shadow: var(--shadow-subtle);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .figure-box:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .figure-hover {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .figure-hover:hover {
+            transform: scale(1.015);
+        }
+
+        .figure-caption {
+            font-size: 0.95rem;
+            color: var(--ink-soft);
+            margin-top: 14px;
+            text-align: justify;
+        }
+
+        /* Result tables */
+        .result-table-wrap {
+            border: 1px solid var(--hairline);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: var(--bg-elevated);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .result-table {
+            margin-bottom: 0;
+        }
+
+        .result-table th {
+            background-color: var(--bg-subtle);
+            color: var(--ink);
+            font-weight: 700;
+            font-size: 0.88rem;
+            border-bottom: 2px solid var(--hairline-strong);
+            text-align: center;
+            vertical-align: middle;
+            padding: 12px 10px;
+        }
+
+        .result-table td {
+            text-align: center;
+            vertical-align: middle;
+            font-size: 0.92rem;
+            border-top: 1px solid var(--hairline);
+            padding: 11px 10px;
+        }
+
+        .result-table th.model-cell,
+        .result-table td.model-cell {
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .result-table tr.ours-row td {
+            background-color: var(--accent-soft);
+            font-weight: 700;
+            color: var(--accent-text);
+        }
+
+        .result-table tr.ours-row:hover td {
+            background-color: #dbeaff !important;
+        }
+
+        .result-table tbody tr:not(.ours-row):hover td {
+            background-color: #f8f6f0;
+        }
+
+        .badge-best {
+            background: #208752;
+            color: white;
+            font-size: 0.72rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 4px;
+            font-weight: 700;
+        }
+
+        /* Conference Gallery */
+        .gallery-item {
+            position: relative;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: var(--bg-elevated);
+            border: 1px solid var(--hairline);
+            box-shadow: var(--shadow-subtle);
+            transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
+            border-color: var(--hairline-strong);
+        }
+
+        .gallery-img-wrap {
+            width: 100%;
+            height: 260px;
+            overflow: hidden;
+            background: #222;
+            position: relative;
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover .gallery-img {
+            transform: scale(1.08);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 60%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: flex-end;
+            padding: 16px;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-zoom-badge {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 4px 10px;
+            border-radius: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .gallery-caption {
+            padding: 14px 16px;
+            flex-grow: 1;
+        }
+
+        .gallery-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--ink);
+            margin-bottom: 4px;
+            font-family: "Newsreader", serif;
+        }
+
+        .gallery-sub {
+            font-size: 0.85rem;
+            color: var(--ink-soft);
+            line-height: 1.4;
+        }
+
+        /* Lightbox Modal */
+        .lightbox-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            inset: 0;
+            background: rgba(10, 10, 12, 0.94);
+            backdrop-filter: blur(10px);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .lightbox-modal.active {
+            display: flex;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .lightbox-content {
+            max-width: 90vw;
+            max-height: 82vh;
+            border-radius: var(--radius-sm);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            object-fit: contain;
+        }
+
+        .lightbox-caption {
+            color: #f0f0f0;
+            margin-top: 14px;
+            font-size: 1.05rem;
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 24px;
+            right: 28px;
+            color: #fff;
+            font-size: 32px;
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: background 0.2s ease;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* BibTeX Box */
+        .bibtex-box {
+            background: var(--bg-subtle);
+            border: 1px solid var(--hairline-strong);
+            border-radius: var(--radius-md);
+            padding: 18px 20px;
+            position: relative;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 0.88rem;
+            color: var(--ink);
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: var(--bg-elevated);
+            border: 1px solid var(--hairline-strong);
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* Scroll reveal animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(22px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        hr.divider {
+            border-top: 1px solid var(--hairline);
+            margin: 45px 0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem !important;
+            }
+
+            h2 {
+                font-size: 1.3rem !important;
+            }
+
+            .venue-badge {
+                font-size: 0.9rem;
+                padding: 6px 16px;
+            }
+
+            .stat-card .stat-value {
+                font-size: 1.8rem;
+            }
+
+            .gallery-img-wrap {
+                height: 210px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sticky Navigation & Bilingual Switcher -->
+    <nav class="top-navbar">
+        <div class="container d-flex justify-content-between align-items-center" style="max-width: 1040px;">
+            <div class="nav-left">
+                <!-- Home button: back to VNPT AI project hub -->
+                <a class="home-btn" href="https://vnptai.github.io/" title="VNPT AI — vnptai.github.io">
+                    <svg class="home-mark" viewBox="-0.7 0 50.1 54.1" aria-hidden="true" focusable="false"><defs><radialGradient id="vnpm0" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(24.35 27) scale(25.93 25.53)"><stop stop-color="#0047BB"/><stop offset="1" stop-color="#0072CE"/></radialGradient><linearGradient id="vnpm1" x1="22.6" y1="20.6" x2="28.96" y2="20.6" gradientUnits="userSpaceOnUse"><stop stop-color="#0047BB"/><stop offset="0.19" stop-color="#004CBD" stop-opacity="0.81"/><stop offset="0.41" stop-color="#005AC3" stop-opacity="0.59"/><stop offset="0.64" stop-color="#0071CC" stop-opacity="0.36"/><stop offset="0.88" stop-color="#0091D9" stop-opacity="0.12"/><stop offset="1" stop-color="#00A3E0" stop-opacity="0"/></linearGradient><linearGradient id="vnpm2" x1="29.36" y1="18.04" x2="26.26" y2="6.04" gradientUnits="userSpaceOnUse"><stop stop-color="#0047BB"/><stop offset="0.19" stop-color="#004CBD" stop-opacity="0.81"/><stop offset="0.41" stop-color="#005AC3" stop-opacity="0.59"/><stop offset="0.64" stop-color="#0071CC" stop-opacity="0.36"/><stop offset="0.88" stop-color="#0091D9" stop-opacity="0.12"/><stop offset="1" stop-color="#00A3E0" stop-opacity="0"/></linearGradient><linearGradient id="vnpm3" x1="17.86" y1="25.27" x2="20.97" y2="19.8" gradientUnits="userSpaceOnUse"><stop stop-color="#0047BB"/><stop offset="0.19" stop-color="#004CBD" stop-opacity="0.81"/><stop offset="0.41" stop-color="#005AC3" stop-opacity="0.59"/><stop offset="0.64" stop-color="#0071CC" stop-opacity="0.36"/><stop offset="0.88" stop-color="#0091D9" stop-opacity="0.12"/><stop offset="1" stop-color="#00A3E0" stop-opacity="0"/></linearGradient><linearGradient id="vnpm4" x1="18.98" y1="18.23" x2="6.88" y2="14.86" gradientUnits="userSpaceOnUse"><stop stop-color="#0047BB"/><stop offset="0.19" stop-color="#004CBD" stop-opacity="0.81"/><stop offset="0.41" stop-color="#005AC3" stop-opacity="0.59"/><stop offset="0.64" stop-color="#0071CC" stop-opacity="0.36"/><stop offset="0.88" stop-color="#0091D9" stop-opacity="0.12"/><stop offset="1" stop-color="#00A3E0" stop-opacity="0"/></linearGradient><linearGradient id="vnpm5" x1="19.6" y1="31.65" x2="16.49" y2="26.18" gradientUnits="userSpaceOnUse"><stop stop-color="#0047BB"/><stop offset="0.19" stop-color="#004CBD" stop-opacity="0.81"/><stop offset="0.41" stop-color="#005AC3" stop-opacity="0.59"/><stop offset="0.64" stop-color="#0071CC" stop-opacity="0.36"/><stop offset="0.88" stop-color="#0091D9" stop-opacity="0.12"/><stop offset="1" stop-color="#00A3E0" stop-opacity="0"/></linearGradient><linearGradient id="vnpm6" x1="13.97" y1="27.17" x2="5.17" y2="36.01" gradientUnits="userSpaceOnUse"><stop stop-color="#0047BB"/><stop offset="0.19" stop-color="#004CBD" stop-opacity="0.81"/><stop offset="0.41" stop-color="#005AC3" stop-opacity="0.59"/><stop offset="0.64" stop-color="#0071CC" stop-opacity="0.36"/><stop offset="0.88" stop-color="#0091D9" stop-opacity="0.12"/><stop offset="1" stop-color="#00A3E0" stop-opacity="0"/></linearGradient><linearGradient id="vnpm7" x1="26.08" y1="33.37" x2="19.72" y2="33.37" gradientUnits="userSpaceOnUse"><stop stop-color="#0047BB"/><stop offset="0.19" stop-color="#004CBD" stop-opacity="0.81"/><stop offset="0.41" stop-color="#005AC3" stop-opacity="0.59"/><stop offset="0.64" stop-color="#0071CC" stop-opacity="0.36"/><stop offset="0.88" stop-color="#0091D9" stop-opacity="0.12"/><stop offset="1" stop-color="#00A3E0" stop-opacity="0"/></linearGradient><linearGradient id="vnpm8" x1="19.33" y1="35.93" x2="22.42" y2="47.92" gradientUnits="userSpaceOnUse"><stop stop-color="#0047BB"/><stop offset="0.19" stop-color="#004CBD" stop-opacity="0.81"/><stop offset="0.41" stop-color="#005AC3" stop-opacity="0.59"/><stop offset="0.64" stop-color="#0071CC" stop-opacity="0.36"/><stop offset="0.88" stop-color="#0091D9" stop-opacity="0.12"/><stop offset="1" stop-color="#00A3E0" stop-opacity="0"/></linearGradient><linearGradient id="vnpm9" x1="30.85" y1="28.74" x2="27.74" y2="34.2" gradientUnits="userSpaceOnUse"><stop stop-color="#0047BB"/><stop offset="0.19" stop-color="#004CBD" stop-opacity="0.81"/><stop offset="0.41" stop-color="#005AC3" stop-opacity="0.59"/><stop offset="0.64" stop-color="#0071CC" stop-opacity="0.36"/><stop offset="0.88" stop-color="#0091D9" stop-opacity="0.12"/><stop offset="1" stop-color="#00A3E0" stop-opacity="0"/></linearGradient><linearGradient id="vnpm10" x1="29.72" y1="35.78" x2="41.82" y2="39.14" gradientUnits="userSpaceOnUse"><stop stop-color="#0047BB"/><stop offset="0.19" stop-color="#004CBD" stop-opacity="0.81"/><stop offset="0.41" stop-color="#005AC3" stop-opacity="0.59"/><stop offset="0.64" stop-color="#0071CC" stop-opacity="0.36"/><stop offset="0.88" stop-color="#0091D9" stop-opacity="0.12"/><stop offset="1" stop-color="#00A3E0" stop-opacity="0"/></linearGradient><linearGradient id="vnpm11" x1="29.11" y1="22.32" x2="32.21" y2="27.79" gradientUnits="userSpaceOnUse"><stop stop-color="#0047BB"/><stop offset="0.19" stop-color="#004CBD" stop-opacity="0.81"/><stop offset="0.41" stop-color="#005AC3" stop-opacity="0.59"/><stop offset="0.64" stop-color="#0071CC" stop-opacity="0.36"/><stop offset="0.88" stop-color="#0091D9" stop-opacity="0.12"/><stop offset="1" stop-color="#00A3E0" stop-opacity="0"/></linearGradient><linearGradient id="vnpm12" x1="34.73" y1="26.8" x2="43.54" y2="17.96" gradientUnits="userSpaceOnUse"><stop stop-color="#0047BB"/><stop offset="0.19" stop-color="#004CBD" stop-opacity="0.81"/><stop offset="0.41" stop-color="#005AC3" stop-opacity="0.59"/><stop offset="0.64" stop-color="#0071CC" stop-opacity="0.36"/><stop offset="0.88" stop-color="#0091D9" stop-opacity="0.12"/><stop offset="1" stop-color="#00A3E0" stop-opacity="0"/></linearGradient></defs><path d="M46.5 34.6C45.7 34.1 44.7 33.9 43.8 34C42.6 34.2 41.3 33.9 40.3 33.3C38.9 32.5 38 31.3 37.6 29.9C37.2 28.7 36.5 27.8 35.6 27C36.6 26.3 37.3 25.3 37.6 24.1C38 22.7 39 21.5 40.3 20.7C41.4 20.1 42.6 19.9 43.8 20C44.7 20.1 45.7 19.9 46.5 19.4C47.5 18.9 48.2 17.9 48.5 16.8C48.8 15.7 48.7 14.5 48.1 13.5C46.9 11.4 44.2 10.7 42.1 11.9C41.3 12.4 40.6 13.1 40.3 13.9C39.8 15 38.9 16 37.8 16.6C36.5 17.3 35 17.5 33.5 17.2C32.3 16.9 31.1 17 30 17.4C29.8 16.2 29.3 15.1 28.4 14.2C27.4 13.2 26.8 11.8 26.8 10.3C26.8 9.1 27.2 7.9 27.9 6.9C28.5 6.2 28.8 5.3 28.8 4.3C28.8 1.9 26.8 0 24.4 0C21.9 0 20 1.9 20 4.3C20 5.3 20.3 6.1 20.8 6.9C21.5 7.9 21.9 9.1 21.9 10.3C21.9 11.8 21.3 13.2 20.3 14.3C19.4 15.1 18.9 16.2 18.7 17.4C17.6 16.9 16.4 16.8 15.2 17.1C13.7 17.5 12.2 17.3 10.9 16.5C9.8 15.9 9 15 8.5 13.9C8.1 13.1 7.4 12.4 6.6 11.9C4.5 10.7 1.8 11.4 0.6 13.5C0 14.5-0.1 15.7 0.2 16.8C0.5 17.9 1.2 18.8 2.2 19.4C3 19.9 4 20.1 4.9 20C6.1 19.8 7.3 20.1 8.4 20.7C9.7 21.5 10.7 22.7 11.1 24.1C11.5 25.3 12.1 26.2 13.1 27C12.1 27.7 11.4 28.7 11.1 29.9C10.7 31.3 9.7 32.5 8.4 33.3C7.3 33.9 6.1 34.1 4.9 34C3.9 33.9 3 34.1 2.2 34.6C0.1 35.8-0.6 38.4 0.6 40.5C1.4 41.9 2.9 42.7 4.4 42.7C5.2 42.7 5.9 42.5 6.6 42.1C7.4 41.6 8.1 40.9 8.4 40.1C8.9 39 9.8 38 10.9 37.4C12.2 36.7 13.7 36.5 15.2 36.8C16.4 37.1 17.6 37 18.7 36.6C18.9 37.8 19.4 38.9 20.3 39.8C21.3 40.8 21.9 42.2 21.9 43.7C21.9 44.9 21.5 46.1 20.8 47.1C20.2 47.8 19.9 48.7 19.9 49.7C19.9 52.1 21.9 54 24.3 54C26.8 54 28.7 52.1 28.7 49.7C28.7 48.7 28.4 47.9 27.9 47.1C27.2 46.1 26.8 45 26.8 43.7C26.8 42.2 27.4 40.8 28.4 39.7C29.3 38.9 29.8 37.8 30 36.6C31.1 37.1 32.3 37.2 33.5 36.9C35 36.5 36.5 36.7 37.8 37.5C38.9 38.1 39.7 39 40.2 40.1C40.6 40.9 41.2 41.6 42.1 42.1C42.8 42.5 43.5 42.7 44.3 42.7C45.8 42.7 47.3 41.9 48.1 40.5C49.3 38.4 48.6 35.8 46.5 34.6ZM27.2 28.6C26.8 29.3 26.6 29.9 26.5 30.6C25.8 30.4 25.1 30.2 24.3 30.2C23.6 30.2 22.9 30.3 22.2 30.6C22.1 29.9 21.9 29.2 21.5 28.6C21.2 28 20.7 27.4 20.1 27C20.7 26.6 21.2 26 21.5 25.4C21.9 24.8 22.1 24.1 22.2 23.4C22.9 23.7 23.6 23.8 24.4 23.8C25.1 23.8 25.8 23.7 26.5 23.4C26.6 24.1 26.8 24.8 27.2 25.4C27.5 26.1 28 26.6 28.6 27C28 27.4 27.5 28 27.2 28.6ZM42.5 14.9C42.7 14.5 42.9 14.2 43.3 14C43.6 13.8 43.9 13.8 44.3 13.8C45 13.8 45.6 14.1 46 14.7C46.5 15.6 46.2 16.8 45.3 17.4C44.9 17.6 44.5 17.6 44.1 17.6C42.3 17.4 40.6 17.8 39.1 18.6C40.6 17.8 41.8 16.5 42.5 14.9ZM32.1 19.4C32.4 19.4 32.6 19.4 32.9 19.5L32.9 19.5C35 20 37.1 19.7 39 18.7C37.2 19.7 35.8 21.4 35.2 23.4C35 24.3 34.5 24.9 33.7 25.4C32.2 26.3 30.2 25.7 29.3 24.2C28.9 23.5 28.7 22.6 29 21.8C29.2 21 29.7 20.3 30.5 19.8C31 19.6 31.5 19.4 32.1 19.4ZM24.4 2.4C25.4 2.4 26.3 3.3 26.3 4.3C26.3 4.8 26.2 5.1 25.9 5.5C24.9 6.9 24.4 8.5 24.4 10.2C24.3 8.5 23.8 6.9 22.8 5.5C22.5 5.1 22.4 4.8 22.4 4.3C22.4 3.3 23.3 2.4 24.4 2.4ZM22 16L22 16C23.5 14.5 24.3 12.5 24.4 10.4C24.4 12.4 25.2 14.4 26.7 15.9C27.3 16.5 27.6 17.3 27.6 18.2C27.6 20 26.2 21.4 24.4 21.4C22.6 21.4 21.1 20 21.1 18.2C21.1 17.4 21.4 16.6 22 16ZM5.5 17.5C5.2 17.5 4.9 17.5 4.6 17.6C4.2 17.6 3.8 17.5 3.5 17.3C3 17.1 2.7 16.6 2.5 16.2C2.4 15.7 2.5 15.1 2.7 14.7C3 14.2 3.4 13.9 3.9 13.8C4.4 13.7 5 13.7 5.4 14C5.8 14.2 6 14.5 6.2 14.9C6.9 16.4 8.1 17.7 9.6 18.6C8.3 17.9 6.9 17.5 5.5 17.5ZM9.7 18.7C11.6 19.7 13.7 20 15.8 19.5C16.6 19.3 17.5 19.4 18.2 19.8C19 20.2 19.5 20.9 19.7 21.8C20 22.6 19.9 23.4 19.4 24.2C18.5 25.7 16.5 26.2 15 25.3C14.3 24.9 13.7 24.3 13.5 23.5L13.5 23.5C12.9 21.4 11.6 19.7 9.7 18.7ZM6.2 39.1C6 39.5 5.7 39.8 5.4 40C4.5 40.5 3.3 40.2 2.7 39.3C2.2 38.4 2.5 37.2 3.4 36.6C3.7 36.5 4.1 36.4 4.4 36.4C4.5 36.4 4.6 36.4 4.6 36.4C6.4 36.6 8.1 36.2 9.6 35.4C8.1 36.2 6.9 37.5 6.2 39.1ZM15.8 34.5L15.8 34.5C13.7 34 11.5 34.3 9.7 35.3C11.5 34.3 12.8 32.6 13.5 30.6C13.7 29.7 14.2 29.1 15 28.6C15.5 28.3 16 28.2 16.6 28.2C16.9 28.2 17.1 28.2 17.4 28.3C18.3 28.5 19 29.1 19.4 29.8C20.3 31.3 19.8 33.3 18.2 34.2C17.5 34.6 16.6 34.7 15.8 34.5ZM24.3 51.6C23.2 51.6 22.4 50.7 22.4 49.7C22.4 49.2 22.5 48.9 22.8 48.5C23.8 47.1 24.3 45.5 24.3 43.8C24.3 45.5 24.9 47.1 25.9 48.5C26.2 48.9 26.3 49.3 26.3 49.7C26.3 50.7 25.4 51.6 24.3 51.6ZM26.7 38L26.7 38C25.2 39.6 24.3 41.5 24.3 43.6C24.3 41.6 23.5 39.6 22 38.1C21.4 37.5 21.1 36.7 21.1 35.8C21.1 34.1 22.5 32.6 24.3 32.6C26.1 32.6 27.6 34.1 27.6 35.8C27.6 36.6 27.2 37.4 26.7 38ZM34.9 34.3C34.2 34.3 33.6 34.4 32.9 34.5C32.1 34.7 31.2 34.6 30.5 34.2C28.9 33.3 28.4 31.4 29.3 29.8C30.2 28.3 32.2 27.8 33.7 28.7C34.4 29.1 35 29.7 35.2 30.5L35.2 30.5C35.8 32.6 37.1 34.3 39 35.3C37.7 34.6 36.3 34.3 34.9 34.3ZM46 39.3C45.4 40.2 44.2 40.5 43.3 40C42.9 39.8 42.6 39.5 42.5 39.1C41.8 37.6 40.6 36.3 39.1 35.4C40.6 36.3 42.3 36.6 44.1 36.4C44.5 36.4 44.9 36.5 45.2 36.7C46.2 37.2 46.5 38.4 46 39.3Z" fill="url(#vnpm0)"/><path d="M14.2 13.4C12.9 13.4 11.7 12.7 11.1 11.6C10.6 10.8 10.5 9.8 10.7 8.9C11 8 11.6 7.2 12.4 6.7C13 6.4 13.6 6.3 14.2 6.3C15.5 6.3 16.7 7 17.4 8.1C18.4 9.8 17.8 12 16.1 13C15.5 13.3 14.9 13.4 14.2 13.4Z" fill="#59CBE8"/><path d="M7.4 28.8C6.7 29.9 5.5 30.6 4.2 30.6C3.2 30.6 2.3 30.3 1.6 29.6C1 28.9 0.6 28 0.6 27C0.6 26.4 0.7 25.8 1.1 25.3C1.7 24.1 2.9 23.5 4.2 23.5C6.2 23.5 7.9 25.1 7.9 27C7.9 27.7 7.7 28.3 7.4 28.8Z" fill="#59CBE8"/><path d="M17.5 42.4C18.1 43.5 18.1 44.9 17.5 46C17 46.8 16.2 47.4 15.3 47.6C14.3 47.9 13.3 47.8 12.5 47.3C11.9 47 11.5 46.5 11.2 46C10.5 44.9 10.5 43.5 11.2 42.4C12.2 40.7 14.4 40.1 16.1 41.1C16.7 41.4 17.1 41.9 17.5 42.4Z" fill="#59CBE8"/><path d="M34.4 40.6C35.7 40.6 37 41.3 37.6 42.4C38.1 43.2 38.2 44.2 38 45.1C37.7 46 37.1 46.8 36.3 47.3C35.7 47.6 35.1 47.7 34.5 47.7C33.2 47.7 31.9 47 31.3 45.9C30.3 44.2 30.9 42 32.6 41C33.2 40.7 33.8 40.6 34.4 40.6Z" fill="#59CBE8"/><path d="M41.3 25.2C42 24.1 43.2 23.4 44.5 23.4C45.5 23.4 46.4 23.7 47.1 24.4C47.7 25.1 48.1 26 48.1 27C48.1 27.6 47.9 28.2 47.6 28.7C47 29.9 45.8 30.5 44.5 30.5C42.5 30.5 40.8 28.9 40.8 27C40.8 26.3 41 25.7 41.3 25.2Z" fill="#59CBE8"/><path d="M31.2 11.6C30.6 10.5 30.6 9.1 31.2 8C31.7 7.2 32.5 6.6 33.4 6.4C34.4 6.1 35.4 6.2 36.2 6.7C36.7 7 37.2 7.5 37.5 8C38.2 9.1 38.2 10.5 37.5 11.6C36.5 13.3 34.3 13.9 32.6 12.9C32 12.6 31.5 12.1 31.2 11.6Z" fill="#59CBE8"/><path d="M30 17.4C29.7 17.5 29.5 17.6 29.3 17.8C28.4 18.3 27.6 19 27.1 19.9C26.6 20.8 25.5 21.4 24.4 21.4C23.1 21.4 22.1 20.7 21.5 19.7L21.6 19.8C21.8 20.2 22 20.7 22.1 21.1C22.3 21.9 22.4 22.6 22.2 23.4C22.9 23.6 23.6 23.8 24.4 23.8C25.1 23.8 25.8 23.7 26.5 23.4C28.6 22.6 30.1 20.6 30.1 18.2C30.1 17.9 30 17.7 30 17.4Z" fill="url(#vnpm1)"/><path d="M29.3 17.8C29.5 17.6 29.7 17.5 30 17.4C29.8 16.2 29.3 15.1 28.4 14.2C27.4 13.2 26.8 11.8 26.8 10.3C26.8 9.1 27.2 7.9 27.9 6.9C28.5 6.2 28.8 5.3 28.8 4.3C28.8 1.9 26.8 0 24.4 0V2.4C25.4 2.4 26.3 3.3 26.3 4.3C26.3 4.8 26.2 5.1 25.9 5.5C24.9 6.9 24.4 8.5 24.4 10.2V10.4C24.4 12.4 25.2 14.4 26.7 15.9C27.3 16.5 27.6 17.3 27.6 18.2C27.6 18.8 27.4 19.4 27.1 19.9L27.1 19.9C27.6 19 28.4 18.3 29.3 17.8Z" fill="url(#vnpm2)"/><path d="M18.7 17.4C18.7 17.6 18.7 17.9 18.7 18.2C18.7 19.2 18.9 20.2 19.5 21.1C20 22 20 23.2 19.4 24.2C18.8 25.2 17.7 25.8 16.5 25.8L16.6 25.8C17.1 25.8 17.6 25.8 18.1 26C18.8 26.2 19.5 26.5 20.1 27C20.7 26.5 21.2 26 21.6 25.4C21.9 24.7 22.1 24.1 22.3 23.4C22.6 21.2 21.5 18.9 19.5 17.7C19.2 17.6 19 17.5 18.7 17.4Z" fill="url(#vnpm3)"/><path d="M18.7 18.2C18.7 17.9 18.7 17.6 18.7 17.4C17.6 16.9 16.4 16.8 15.2 17.1C13.7 17.5 12.2 17.3 10.9 16.5C9.8 15.9 9 15 8.5 13.9C8.1 13 7.5 12.3 6.6 11.9C4.5 10.7 1.8 11.4 0.6 13.5L2.7 14.7C3.3 13.8 4.5 13.4 5.4 14C5.8 14.2 6.1 14.5 6.2 14.9C6.9 16.4 8.1 17.7 9.6 18.6L9.7 18.6C11.6 19.7 13.7 20 15.8 19.5C16.6 19.3 17.5 19.4 18.2 19.8C18.8 20.1 19.2 20.5 19.5 21L19.5 21C19 20.2 18.7 19.2 18.7 18.2Z" fill="url(#vnpm4)"/><path d="M13.1 26.9C13.3 27.1 13.5 27.3 13.8 27.4C14.7 27.9 15.7 28.2 16.7 28.2C17.8 28.2 18.8 28.8 19.4 29.8C20 30.8 20 32.1 19.4 33L19.4 32.9C19.7 32.5 20 32.2 20.3 31.8C20.9 31.3 21.5 30.9 22.2 30.6C22.1 29.9 21.9 29.2 21.5 28.6C21.2 27.9 20.7 27.4 20.1 27C18.3 25.6 15.8 25.3 13.7 26.5C13.5 26.6 13.3 26.8 13.1 26.9Z" fill="url(#vnpm5)"/><path d="M13.8 27.4C13.5 27.3 13.3 27.1 13.1 26.9C12.1 27.7 11.4 28.7 11.1 29.9C10.7 31.3 9.7 32.5 8.4 33.2C7.3 33.8 6.1 34.1 4.9 34C4 33.9 3 34.1 2.2 34.5C0.1 35.7-0.6 38.4 0.6 40.5L2.7 39.3C2.2 38.3 2.5 37.2 3.4 36.6C3.8 36.4 4.2 36.3 4.6 36.4C6.4 36.5 8.1 36.2 9.6 35.4L9.7 35.3C11.5 34.2 12.9 32.6 13.5 30.5C13.7 29.7 14.2 29 15 28.6C15.5 28.3 16.1 28.2 16.7 28.2L16.7 28.2C15.7 28.2 14.7 27.9 13.8 27.4Z" fill="url(#vnpm6)"/><path d="M18.7 36.6C18.9 36.5 19.2 36.3 19.4 36.2C20.3 35.7 21.1 35 21.6 34.1C22.1 33.2 23.2 32.6 24.3 32.6C25.5 32.6 26.6 33.3 27.2 34.3L27.1 34.2C26.9 33.7 26.7 33.3 26.6 32.8C26.4 32.1 26.3 31.3 26.4 30.6C25.8 30.3 25.1 30.2 24.3 30.2C23.6 30.2 22.9 30.3 22.2 30.6C20.1 31.4 18.6 33.4 18.6 35.8C18.6 36 18.6 36.3 18.7 36.6Z" fill="url(#vnpm7)"/><path d="M19.4 36.2C19.2 36.3 18.9 36.5 18.7 36.6C18.9 37.8 19.4 38.9 20.3 39.7C21.3 40.8 21.9 42.2 21.9 43.7C21.9 44.9 21.5 46.1 20.8 47.1C20.2 47.8 19.9 48.7 19.9 49.6C19.9 52 21.9 54 24.3 54V51.6C23.2 51.6 22.4 50.7 22.4 49.6C22.4 49.2 22.5 48.8 22.7 48.5C23.8 47.1 24.3 45.5 24.3 43.8V43.6C24.3 41.5 23.5 39.6 22 38C21.4 37.4 21.1 36.6 21.1 35.8C21.1 35.2 21.3 34.6 21.6 34.1L21.5 34.1C21 35 20.3 35.7 19.4 36.2Z" fill="url(#vnpm8)"/><path d="M30 36.6C30 36.4 30 36.1 30 35.8C30 34.8 29.8 33.8 29.3 33C28.7 32 28.7 30.8 29.3 29.8C29.9 28.8 31 28.2 32.2 28.3L32.1 28.2C31.6 28.2 31.1 28.2 30.6 28C29.9 27.8 29.2 27.5 28.6 27C28 27.5 27.5 28 27.2 28.6C26.8 29.3 26.6 29.9 26.5 30.6C26.1 32.8 27.2 35.1 29.2 36.3C29.5 36.4 29.7 36.5 30 36.6Z" fill="url(#vnpm9)"/><path d="M30 35.8C30 36.1 30 36.4 30 36.6C31.1 37.1 32.4 37.2 33.5 36.9C35 36.5 36.5 36.7 37.8 37.5C38.9 38.1 39.7 39 40.2 40.1C40.6 41 41.3 41.7 42.1 42.1C44.2 43.3 46.9 42.6 48.1 40.5L46 39.3C45.4 40.2 44.2 40.6 43.3 40C42.9 39.8 42.7 39.5 42.5 39.1C41.8 37.6 40.6 36.3 39.1 35.4L39 35.4C37.2 34.3 35 34 32.9 34.5C32.1 34.7 31.2 34.6 30.5 34.2C29.9 33.9 29.5 33.5 29.3 33L29.2 33C29.8 33.8 30 34.8 30 35.8Z" fill="url(#vnpm10)"/><path d="M35.6 27C35.4 26.9 35.2 26.7 34.9 26.6C34 26.1 33 25.8 32 25.8C30.9 25.8 29.9 25.2 29.3 24.2C28.7 23.2 28.8 21.9 29.4 20.9L29.3 21C29 21.4 28.8 21.8 28.4 22.2C27.8 22.7 27.2 23.1 26.5 23.4C26.6 24.1 26.8 24.8 27.2 25.4C27.6 26.1 28 26.6 28.6 27C30.4 28.4 32.9 28.7 35 27.5C35.2 27.3 35.4 27.2 35.6 27Z" fill="url(#vnpm11)"/><path d="M34.9 26.6C35.2 26.7 35.4 26.9 35.6 27C36.6 26.3 37.3 25.3 37.6 24.1C38 22.7 39 21.5 40.3 20.8C41.4 20.1 42.6 19.9 43.8 20C44.8 20.1 45.7 19.9 46.5 19.5C48.6 18.3 49.3 15.6 48.1 13.5L46 14.7C46.5 15.6 46.2 16.8 45.3 17.4C44.9 17.6 44.5 17.6 44.1 17.6C42.4 17.4 40.6 17.8 39.1 18.6L39 18.7C37.2 19.8 35.9 21.4 35.3 23.5C35 24.3 34.5 25 33.7 25.4C33.2 25.7 32.6 25.8 32 25.8L32 25.8C33 25.8 34 26.1 34.9 26.6Z" fill="url(#vnpm12)"/></svg>
+                    <span class="home-text">VNPT AI</span>
+                </a>
+                <span class="nav-divider" aria-hidden="true"></span>
+                <span
+                    style="font-weight: 800; font-size: 1.15rem; color: var(--accent); letter-spacing: -0.5px;">Lean4-Audit</span>
+                <span class="text-muted d-none d-md-inline" style="font-size: 0.85rem; margin-left: 8px;">| ICML 2026 · AI4Math</span>
+            </div>
+
+            <!-- Language Switcher with VN & UK Flags -->
+            <div class="lang-switch-container">
+                <button type="button" class="lang-btn active" id="btn-lang-vi" onclick="setLanguage('vi')">
+                    <!-- SVG Flag of Vietnam -->
+                    <svg class="flag-icon" viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="30" height="20" fill="#da251d" />
+                        <polygon
+                            points="15,4 16.47,8.53 21.23,8.53 17.38,11.33 18.85,15.86 15,13.06 11.15,15.86 12.62,11.33 8.77,8.53 13.53,8.53"
+                            fill="#ff0" />
+                    </svg>
+                    <span>Tiếng Việt</span>
+                </button>
+                <button type="button" class="lang-btn" id="btn-lang-en" onclick="setLanguage('en')">
+                    <!-- SVG Flag of UK / English -->
+                    <svg class="flag-icon" viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg">
+                        <clipPath id="s">
+                            <path d="M0,0 v30 h60 v-30 z" />
+                        </clipPath>
+                        <clipPath id="t">
+                            <path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z" />
+                        </clipPath>
+                        <g clip-path="url(#s)">
+                            <path d="M0,0 v30 h60 v-30 z" fill="#012169" />
+                            <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6" />
+                            <path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#t)" stroke="#C8102E" stroke-width="4" />
+                            <path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10" />
+                            <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6" />
+                        </g>
+                    </svg>
+                    <span>English</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container" style="max-width: 1040px; padding-top: 25px;">
+
+        <!-- Header Section -->
+        <header class="text-center pt-3 pb-2">
+            <h1 class="font-weight-bold" style="font-size: 2.5rem; line-height: 1.25; margin-bottom: 12px;">
+                <span class="lang-en d-none">Automated Semantic Alignment Verification and Error Categorization of Lean 4 Formalizations via Decomposition-Guided Auditing</span><span class="lang-vi">Tự Động Kiểm Chứng Tương Đồng Ngữ Nghĩa và Phân Loại Lỗi cho Hình Thức Hóa Lean 4 Bằng Kiểm Toán Dẫn Hướng Qua Phân Rã</span>
+            </h1>
+
+            <h2 class="text-muted font-italic"
+                style="font-size: 1.45rem; font-weight: 500; max-width: 860px; margin: 0 auto 16px;">
+                <span class="lang-en d-none">Technical report for AI4Math-2026 Track 1 — the FormalRx semantic-alignment challenge</span><span class="lang-vi">Báo cáo kỹ thuật cho AI4Math-2026 Track 1 — cuộc thi kiểm chứng tương đồng ngữ nghĩa FormalRx</span>
+            </h2>
+
+            <!-- Venue Badge -->
+            <div class="d-flex justify-content-center align-items-center flex-wrap gap-2">
+                <span class="venue-badge">
+                    <i class="fa-solid fa-square-root-variable"></i>
+                    <span>ICML 2026 · AI for Math Workshop</span>
+                    <span class="oral-pill">Poster</span>
+                </span>
+            </div>
+
+            <!-- Authors list -->
+            <div class="my-3 font-weight-normal" style="font-size: 1.12rem; line-height: 2;">
+                <span class="author-link">Huan Vu</span> &nbsp;•&nbsp;
+                <span class="author-link">Cuong Nguyen</span> &nbsp;•&nbsp;
+                <span class="author-link">Thien Luong</span>
+            </div>
+
+            <!-- Affiliations -->
+            <div class="mb-4 text-muted" style="font-size: 0.95rem; line-height: 1.6;">
+                <div>
+                    <span class="lang-en d-none">National Economics University (NEU), Vietnam</span><span class="lang-vi">Đại học Kinh tế Quốc dân (NEU), Việt Nam</span>
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                    <span class="lang-en d-none">VNPT AI, VNPT Group, Vietnam</span><span class="lang-vi">VNPT AI, Tập đoàn Bưu chính Viễn thông Việt Nam</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-center flex-wrap mb-4">
+                <a class="action-btn" href="https://openreview.net/forum?id=FqYFz767mp" target="_blank" rel="noopener">
+                    <i class="fa-solid fa-file-lines text-danger"></i>
+                    OpenReview
+                </a>
+                <a class="action-btn" href="https://icml.cc/virtual/2026/82564" target="_blank" rel="noopener">
+                    <i class="fa-solid fa-chalkboard-user text-primary"></i>
+                    <span class="lang-en d-none">ICML 2026 Poster</span><span class="lang-vi">Poster ICML 2026</span>
+                </a>
+                <a class="action-btn" href="https://www.codabench.org/competitions/16104/" target="_blank" rel="noopener">
+                    <i class="fa-solid fa-ranking-star text-warning"></i>
+                    FormalRx Challenge
+                </a>
+                <a class="action-btn" href="https://github.com/VNPT-AI-Official/ICML2026-Lean4-Audit" target="_blank" rel="noopener">
+                    <i class="fa-brands fa-github text-dark"></i>
+                    GitHub
+                </a>
+                <a class="action-btn" href="#bibtex-section">
+                    <i class="fa-solid fa-quote-left text-success"></i>
+                    BibTeX
+                </a>
+            </div>
+        </header>
+
+        <!-- Key Metrics Cards -->
+        <div class="row my-4">
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stat-card c1">
+                    <div class="stat-icon"><i class="fa-solid fa-bullseye"></i></div>
+                    <div class="stat-value">0.3397</div>
+                    <div class="stat-label">Overall</div>
+                    <div class="stat-sub"><span class="lang-en d-none">per-sample joint accuracy</span><span class="lang-vi">độ chính xác đồng thời</span></div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stat-card c2">
+                    <div class="stat-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <div class="stat-value">0.7327</div>
+                    <div class="stat-label">Verdict F1</div>
+                    <div class="stat-sub"><span class="lang-en d-none">alignment judgement</span><span class="lang-vi">phán quyết khớp nghĩa</span></div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stat-card c3">
+                    <div class="stat-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+                    <div class="stat-value">0.7671</div>
+                    <div class="stat-label"><span class="lang-en d-none">Correction</span><span class="lang-vi">Sửa Lỗi</span></div>
+                    <div class="stat-sub"><span class="lang-en d-none">accuracy of fixed statements</span><span class="lang-vi">độ chính xác bản sửa</span></div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stat-card c4">
+                    <div class="stat-icon"><i class="fa-solid fa-trophy"></i></div>
+                    <div class="stat-value"><span class="lang-en d-none">2nd</span><span class="lang-vi">Giải Nhì</span></div>
+                    <div class="stat-label">FormalRx Track 1</div>
+                    <div class="stat-sub"><span class="lang-en d-none">VNPT AI team award</span><span class="lang-vi">giải của đội VNPT AI</span></div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="divider">
+
+        <section class="reveal my-5">
+            <h3 class="section-header">
+                <span>💡</span>
+                <span class="lang-en d-none">Abstract</span><span class="lang-vi">Tóm Tắt Bài Báo</span>
+            </h3>
+            <div class="p-4"
+                style="background: var(--bg-elevated); border: 1px solid var(--hairline); border-radius: var(--radius-md); box-shadow: var(--shadow-subtle);">
+                <p class="lang-en d-none mb-0" style="text-align: justify; font-size: 1.08rem; color: var(--ink);">We present a <strong>semantic alignment verification pipeline for Lean 4 autoformalization</strong> developed for the AI4Math @ ICML 2026 FormalRx Challenge. Given an informal mathematical statement and a candidate Lean formalization, the system predicts semantic alignment, generates corrected formal statements, localizes erroneous segments, and classifies errors using the <strong>28-category SCI taxonomy</strong>. Our approach combines structured decomposition of informal mathematics, LLM-based semantic auditing, correction generation, and a hybrid SCI classifier integrating deterministic token substitution rules with model-based classification. Experiments on the official FormalRx benchmark show that our best system achieves an <strong>Overall score of 0.3397</strong>, with strong <strong>Verdict F1 (0.7327)</strong> and <strong>Correction accuracy (0.7671)</strong>. Results indicate that tightly coupled semantic reasoning and correction generation outperform heavily decomposed multi-stage pipelines, while symbolic heuristics provide effective complementary signals for SCI categorization.</p>
+                <p class="lang-vi mb-0" style="text-align: justify; font-size: 1.08rem; color: var(--ink);">Chúng tôi giới thiệu một <strong>quy trình kiểm chứng tương đồng ngữ nghĩa cho bài toán hình thức hóa tự động sang Lean 4</strong>, xây dựng cho cuộc thi FormalRx tại AI4Math @ ICML 2026. Với một mệnh đề toán học viết bằng ngôn ngữ tự nhiên và một bản hình thức hóa Lean ứng viên, hệ thống dự đoán hai bên có tương đồng ngữ nghĩa hay không, sinh mệnh đề hình thức đã sửa, định vị đoạn sai và phân loại lỗi theo <strong>bảng phân loại SCI gồm 28 loại</strong>. Phương pháp kết hợp phân rã có cấu trúc cho mệnh đề toán học, kiểm toán ngữ nghĩa bằng LLM, sinh bản sửa, và bộ phân loại SCI lai giữa luật thay thế token tất định với phân loại bằng mô hình. Thực nghiệm trên bộ đánh giá chính thức FormalRx cho thấy hệ thống tốt nhất đạt <strong>điểm tổng 0.3397</strong>, với <strong>Verdict F1 0.7327</strong> và <strong>độ chính xác bản sửa 0.7671</strong>. Kết quả cho thấy việc gắn chặt suy luận ngữ nghĩa với sinh bản sửa vượt trội các quy trình chia nhỏ thành nhiều bước, còn các heuristic ký hiệu là tín hiệu bổ trợ hiệu quả cho việc phân loại lỗi SCI.</p>
+            </div>
+        </section>
+
+        <section class="reveal my-5">
+            <h3 class="section-header">
+                <span>🎯</span>
+                <span class="lang-en d-none">The FormalRx Challenge (Track 1)</span><span class="lang-vi">Cuộc Thi FormalRx (Track 1)</span>
+            </h3>
+            <p><span class="lang-en d-none">Each test sample pairs an informal mathematical statement with a candidate Lean 4 formalization. A submission must produce a four-part diagnosis; the headline <strong>Overall</strong> score is per-sample joint accuracy over 7,030 test pairs (1,791 aligned, 5,239 misaligned).</span><span class="lang-vi">Mỗi mẫu kiểm thử gồm một mệnh đề toán học bằng ngôn ngữ tự nhiên và một bản hình thức hóa Lean 4 ứng viên. Bài nộp phải đưa ra chẩn đoán gồm bốn phần; điểm <strong>Overall</strong> là độ chính xác đồng thời trên từng mẫu, tính trên 7.030 cặp kiểm thử (1.791 cặp khớp, 5.239 cặp không khớp).</span></p>
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <div class="highlight-card">
+                        <span class="highlight-icon text-primary"><i class="fa-solid fa-scale-balanced"></i></span>
+                        <div class="highlight-title"><span class="lang-en d-none">1 · Verdict</span><span class="lang-vi">1 · Phán Quyết</span></div>
+                        <p class="lang-en d-none">Is the Lean statement semantically aligned with the informal one? Scored by macro F1.</p><p class="lang-vi">Mệnh đề Lean có khớp nghĩa với mệnh đề gốc không? Chấm bằng macro F1.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="highlight-card">
+                        <span class="highlight-icon text-danger"><i class="fa-solid fa-tags"></i></span>
+                        <div class="highlight-title"><span class="lang-en d-none">2 · Categorization</span><span class="lang-vi">2 · Phân Loại Lỗi</span></div>
+                        <p class="lang-en d-none">Which of the 28 SCI error categories applies? Scored by macro F1.</p><p class="lang-vi">Lỗi thuộc loại nào trong 28 loại SCI? Chấm bằng macro F1.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="highlight-card">
+                        <span class="highlight-icon text-warning"><i class="fa-solid fa-crosshairs"></i></span>
+                        <div class="highlight-title"><span class="lang-en d-none">3 · Localization</span><span class="lang-vi">3 · Định Vị</span></div>
+                        <p class="lang-en d-none">Which code segment is wrong? Scored by accuracy.</p><p class="lang-vi">Đoạn mã nào sai? Chấm theo độ chính xác.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="highlight-card">
+                        <span class="highlight-icon text-success"><i class="fa-solid fa-screwdriver-wrench"></i></span>
+                        <div class="highlight-title"><span class="lang-en d-none">4 · Correction</span><span class="lang-vi">4 · Sửa Lỗi</span></div>
+                        <p class="lang-en d-none">Produce a corrected Lean 4 statement. Scored by accuracy.</p><p class="lang-vi">Sinh mệnh đề Lean 4 đã sửa. Chấm theo độ chính xác.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal my-5">
+            <h3 class="section-header">
+                <span>🔧</span>
+                <span class="lang-en d-none">Proposed Method: Decomposition-Guided Auditing</span><span class="lang-vi">Phương Pháp Đề Xuất: Kiểm Toán Dẫn Hướng Bằng Phân Rã</span>
+            </h3>
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <div class="p-3"
+                        style="background: var(--bg-elevated); border: 1px solid var(--hairline); border-radius: 10px; height: 100%;">
+                        <h5 class="font-weight-bold" style="color: var(--accent);">
+                            <span class="badge badge-primary mr-1">1</span>
+                            <span class="lang-en d-none">Structured Decomposition</span><span class="lang-vi">Phân Rã Có Cấu Trúc</span>
+                        </h5>
+                        <p class="small mb-0 text-muted"><span class="lang-en d-none">The informal statement is broken into its mathematical components so that each part can be checked against the formalization.</span><span class="lang-vi">Mệnh đề toán học được tách thành các thành phần để đối chiếu từng phần với bản hình thức hóa.</span></p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="p-3"
+                        style="background: var(--bg-elevated); border: 1px solid var(--hairline); border-radius: 10px; height: 100%;">
+                        <h5 class="font-weight-bold" style="color: var(--accent);">
+                            <span class="badge badge-primary mr-1">2</span>
+                            <span class="lang-en d-none">LLM Semantic Audit</span><span class="lang-vi">Kiểm Toán Ngữ Nghĩa Bằng LLM</span>
+                        </h5>
+                        <p class="small mb-0 text-muted"><span class="lang-en d-none">An LLM judges whether the Lean statement preserves the meaning of the informal one.</span><span class="lang-vi">LLM thẩm định mệnh đề Lean có giữ nguyên nghĩa của mệnh đề gốc hay không.</span></p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="p-3"
+                        style="background: var(--bg-elevated); border: 1px solid var(--hairline); border-radius: 10px; height: 100%;">
+                        <h5 class="font-weight-bold" style="color: var(--accent);">
+                            <span class="badge badge-primary mr-1">3</span>
+                            <span class="lang-en d-none">Correction &amp; Localization</span><span class="lang-vi">Sửa Lỗi &amp; Định Vị</span>
+                        </h5>
+                        <p class="small mb-0 text-muted"><span class="lang-en d-none">The audit and the corrected statement are generated together; the erroneous segment is localized from the correction.</span><span class="lang-vi">Kết quả thẩm định và mệnh đề đã sửa được sinh cùng lúc; đoạn sai được định vị từ bản sửa.</span></p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="p-3"
+                        style="background: var(--bg-elevated); border: 1px solid var(--hairline); border-radius: 10px; height: 100%;">
+                        <h5 class="font-weight-bold" style="color: var(--accent);">
+                            <span class="badge badge-primary mr-1">4</span>
+                            <span class="lang-en d-none">Hybrid SCI Classifier</span><span class="lang-vi">Bộ Phân Loại SCI Lai</span>
+                        </h5>
+                        <p class="small mb-0 text-muted"><span class="lang-en d-none">Deterministic token-substitution rules are combined with model-based classification to assign one of 28 SCI categories.</span><span class="lang-vi">Kết hợp luật thay thế token tất định với phân loại bằng mô hình để gán một trong 28 loại lỗi SCI.</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal my-5">
+            <h3 class="section-header">
+                <span>✨</span>
+                <span class="lang-en d-none">Results</span><span class="lang-vi">Kết Quả</span>
+            </h3>
+            <div class="mb-4">
+                <h5 class="font-weight-bold mb-2"><span class="lang-en d-none">Best system on the official FormalRx benchmark</span><span class="lang-vi">Hệ thống tốt nhất trên bộ đánh giá chính thức FormalRx</span></h5>
+                <div class="result-table-wrap">
+                    <div class="table-responsive">
+                        <table class="table result-table">
+                            <thead><tr><th class="model-cell">Metric</th><th class="">Score</th></tr></thead>
+                            <tbody><tr class="ours-row"><td class="model-cell"><span class="lang-en d-none">Overall (per-sample joint accuracy)</span><span class="lang-vi">Overall (độ chính xác đồng thời)</span></td><td><strong>0.3397</strong></td></tr><tr><td class="model-cell">Verdict F1</td><td>0.7327</td></tr><tr><td class="model-cell"><span class="lang-en d-none">Correction accuracy</span><span class="lang-vi">Độ chính xác bản sửa</span></td><td>0.7671</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+                <p class="small text-muted mt-2 mb-0"><span class="lang-en d-none">Scores as reported in the paper. Key finding: coupling semantic reasoning with correction generation beats heavily decomposed multi-stage pipelines; symbolic rules complement model-based SCI categorization.</span><span class="lang-vi">Điểm theo báo cáo trong bài. Phát hiện chính: gắn suy luận ngữ nghĩa với sinh bản sửa tốt hơn quy trình chia nhỏ nhiều bước; luật ký hiệu bổ trợ cho việc phân loại lỗi SCI bằng mô hình.</span></p>
+            </div>
+            <div class="mb-4">
+                <h5 class="font-weight-bold mb-2"><span class="lang-en d-none">The SCI error taxonomy (28 categories)</span><span class="lang-vi">Bảng phân loại lỗi SCI (28 loại)</span></h5>
+                <div class="result-table-wrap">
+                    <div class="table-responsive">
+                        <table class="table result-table">
+                            <thead><tr><th class="model-cell"><span class="lang-en d-none">Group</span><span class="lang-vi">Nhóm</span></th><th>#</th><th style="text-align:left"><span class="lang-en d-none">Categories</span><span class="lang-vi">Các loại lỗi</span></th></tr></thead>
+                            <tbody><tr><td class="model-cell"><span class="lang-en d-none">Semantic</span><span class="lang-vi">Ngữ nghĩa</span></td><td>15</td><td style="text-align:left; white-space:normal; font-size:0.85rem;">S1.1 Quantifier Strengthening · S1.2 Quantifier Weakening · S1.3 Logical Connective Misuse · S2.1 Object Type Error · S2.2 Function Confusion · S2.3 Operator Confusion · S2.4 Exponent/Power Error · S2.5 Coefficient/Constant Error · S2.6 Index/Subscript Error · S2.7 (Partial) Order Error · S3.1 Infinity Misinterpretation · S3.2 Extremum Concept Error · S3.3 Cardinality Error · S3.4 Integration/Diff. Confusion · S3.5 Geometric Error</td></tr><tr><td class="model-cell"><span class="lang-en d-none">Constraint</span><span class="lang-vi">Ràng buộc</span></td><td>11</td><td style="text-align:left; white-space:normal; font-size:0.85rem;">C1.1 Positivity Constraint Error · C1.2 Bound Constraint Error · C1.3 Domain Constraint Error · C1.4 Variable Constraint Error · C2.1 Range Shift · C2.2 Range Error · C3.1 Missing Premise · C3.2 Redundant Premise · C3.3 Incorrect Premise · C4 Conclusion Error · C5 Auxiliary Construction Error</td></tr><tr><td class="model-cell"><span class="lang-en d-none">Implementation</span><span class="lang-vi">Cài đặt</span></td><td>2</td><td style="text-align:left; white-space:normal; font-size:0.85rem;">I1 Truncation Error · I2 Operator Precedence Error</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+                <p class="small text-muted mt-2 mb-0"><span class="lang-en d-none">Taxonomy defined by the <a href="https://arxiv.org/abs/2607.04655" target="_blank" rel="noopener">FormalRx benchmark</a>.</span><span class="lang-vi">Bảng phân loại do <a href="https://arxiv.org/abs/2607.04655" target="_blank" rel="noopener">bộ đánh giá FormalRx</a> định nghĩa.</span></p>
+            </div>
+            <div class="p-4 mb-4" style="background: var(--accent-soft); border: 1px solid #cbe0fa; border-radius: var(--radius-md);">
+                <h5 class="font-weight-bold mb-2" style="color: var(--accent-text);"><i class="fa-solid fa-trophy" style="color:#c46400"></i> <span class="lang-en d-none">FormalRx Track 1 — Second Place</span><span class="lang-vi">FormalRx Track 1 — Giải Nhì</span></h5>
+                <p class="mb-0"><span class="lang-en d-none">VNPT AI engineers <strong>Vu Duc Minh, Nguyen Binh Minh, Chu Ngoc Chien and Vu Huan</strong> received the Track 1 Second Place award of the AI4Math @ ICML 2026 challenges. Sources: <a href="https://ai4math2026.github.io/awards/" target="_blank" rel="noopener">official awards page</a> · <a href="https://www.codabench.org/competitions/16104/" target="_blank" rel="noopener">Codabench leaderboard</a>.</span><span class="lang-vi">Các kỹ sư VNPT AI <strong>Vu Duc Minh, Nguyen Binh Minh, Chu Ngoc Chien và Vu Huan</strong> đạt giải Nhì Track 1 tại các cuộc thi AI4Math @ ICML 2026. Nguồn: <a href="https://ai4math2026.github.io/awards/" target="_blank" rel="noopener">trang giải thưởng chính thức</a> · <a href="https://www.codabench.org/competitions/16104/" target="_blank" rel="noopener">bảng xếp hạng Codabench</a>.</span></p>
+            </div>
+        </section>
+
+        <section class="reveal my-5" id="bibtex-section">
+            <h3 class="section-header">
+                <span>📚</span>
+                <span class="lang-en d-none">Citation</span><span class="lang-vi">Trích Dẫn Bài Báo (BibTeX)</span>
+            </h3>
+            <p><span class="lang-en d-none">If you find this work useful, please cite:</span><span class="lang-vi">Nếu nghiên cứu này hữu ích cho công việc của bạn, xin vui lòng trích dẫn:</span></p>
+
+            <div class="bibtex-box">
+                <button type="button" class="copy-btn" onclick="copyBibtex()">
+                    <i class="fa-regular fa-copy"></i>
+                    <span id="copy-btn-text">Copy BibTeX</span>
+                </button>
+                <pre id="bibtex-code" style="margin: 0; color: inherit; font-family: inherit; font-size: inherit;">@inproceedings{vu2026lean4audit,
+  title     = {Technical Report for AI4Math-2026 Track 1: Automated Semantic Alignment Verification and Error Categorization of Lean 4 Formalizations via Decomposition-Guided Auditing},
+  author    = {Vu, Huan and Nguyen, Cuong and Luong, Thien},
+  booktitle = {3rd AI for Math Workshop: Toward Self-Evolving Scientific Agents, ICML 2026},
+  year      = {2026},
+  url       = {https://openreview.net/forum?id=FqYFz767mp}
+}</pre>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="mt-5 pt-4 pb-5 border-top text-center text-muted"
+            style="border-top-color: var(--hairline) !important;">
+            <div class="d-flex justify-content-center align-items-center flex-wrap gap-4 mb-3">
+                <span class="font-weight-bold" style="color: var(--accent); font-size: 1.1rem;">VNPT AI</span>
+            </div>
+            <p class="small mb-1"><span class="lang-en d-none">Bilingual project page for a VNPT AI research publication.</span><span class="lang-vi">Trang giới thiệu công trình nghiên cứu khoa học song ngữ của VNPT AI.</span></p>
+            <p class="small text-muted mb-0">
+                &copy; 2026 Authors &amp; Collaborating Institutions. All rights reserved.
+            </p>
+        </footer>
+
+    </div>
+
+    <!-- Image Lightbox Modal -->
+    <div id="lightbox" class="lightbox-modal" onclick="closeLightbox(event)">
+        <span class="lightbox-close" onclick="closeLightbox(event)">&times;</span>
+        <img id="lightbox-img" class="lightbox-content" src="" alt="Enlarged photo">
+        <div id="lightbox-caption" class="lightbox-caption"></div>
+    </div>
+
+    <!-- JavaScript for Language Switcher, Lightbox, and Scroll Effects -->
+    <script>
+        // Language switching logic
+        function setLanguage(lang) {
+            const isVi = (lang === 'vi');
+
+            // Toggle active button state
+            document.getElementById('btn-lang-vi').classList.toggle('active', isVi);
+            document.getElementById('btn-lang-en').classList.toggle('active', !isVi);
+
+            // Toggle text visibility
+            const viElements = document.querySelectorAll('.lang-vi');
+            const enElements = document.querySelectorAll('.lang-en');
+
+            viElements.forEach(el => {
+                if (isVi) {
+                    el.classList.remove('d-none');
+                } else {
+                    el.classList.add('d-none');
+                }
+            });
+
+            enElements.forEach(el => {
+                if (!isVi) {
+                    el.classList.remove('d-none');
+                } else {
+                    el.classList.add('d-none');
+                }
+            });
+
+            // Update HTML lang attribute
+            document.documentElement.lang = lang;
+
+            // Save preference to localStorage
+            try {
+                localStorage.setItem('vnptai_paper_lang', lang);
+            } catch (e) { }
+        }
+
+        // Initialize language from localStorage or default to Vietnamese
+        document.addEventListener('DOMContentLoaded', () => {
+            let savedLang = 'vi';
+            try {
+                savedLang = localStorage.getItem('vnptai_paper_lang') || 'vi';
+            } catch (e) { }
+            setLanguage(savedLang);
+
+            // Scroll reveal observer
+            const reveals = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            reveals.forEach(el => observer.observe(el));
+        });
+
+        // Lightbox functions
+        function openLightbox(src, caption) {
+            const modal = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            const cap = document.getElementById('lightbox-caption');
+            img.src = src;
+            cap.innerText = caption;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox(e) {
+            if (e.target.id === 'lightbox' || e.target.classList.contains('lightbox-close')) {
+                const modal = document.getElementById('lightbox');
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Close on ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('lightbox');
+                if (modal.classList.contains('active')) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            }
+        });
+
+        // Copy BibTeX functionality
+        function copyBibtex() {
+            const code = document.getElementById('bibtex-code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const btnText = document.getElementById('copy-btn-text');
+                const originalText = btnText.innerText;
+                btnText.innerHTML = '<i class="fa-solid fa-check text-success"></i> Copied!';
+                setTimeout(() => {
+                    btnText.innerText = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Copy failed', err);
+            });
+        }
+    </script>
+</body>
+
+</html>
